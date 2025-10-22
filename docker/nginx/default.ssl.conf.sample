@@ -1,0 +1,38 @@
+# Example HTTPS config for Nginx container
+# 1) Obtain certificates with certbot on the VPS host or via a separate container
+# 2) Mount the cert directory into the nginx container at /certs
+# 3) Replace server_name and certificate file names accordingly
+
+server {
+  listen 80;
+  server_name yourdomain.com;
+  server_tokens off;
+
+  # redirect all http to https
+  return 301 https://$host$request_uri;
+}
+
+server {
+  listen 443 ssl;
+  server_name yourdomain.com;
+
+  client_max_body_size 60M;
+
+  ssl_certificate /certs/fullchain.pem;
+  ssl_certificate_key /certs/privkey.pem;
+
+  location / {
+    try_files $uri $uri/ @proxy_web;
+  }
+
+  location @proxy_web {
+    proxy_set_header Host $http_host;
+    proxy_redirect off;
+    proxy_pass   http://web:8000;
+  }
+
+  location /uploads/ {
+    autoindex on;
+    alias /uploads/;
+  }
+}

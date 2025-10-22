@@ -7,23 +7,21 @@ services:
     command: gunicorn django_project.wsgi -b 0.0.0.0:8000 --workers=2 --threads=4 --worker-class=gthread
     volumes:
       - ./src:/code
-    environment:
-      - "DEBUG=False"
-      - "DB_NAME=postgres"
-      - "DB_USER=postgres"
-      - "DB_PASSWORD=postgres"
-      - "DB_HOST=db"
-      - "DB_PORT=5432"
+    # Load production environment variables for Django
+    env_file:
+      - ./.env.prod
     depends_on:
       - db
+      - redis
   db:
     container_name: "db"
     restart: unless-stopped
     image: postgres:16
     volumes:
       - ./docker/postgres:/var/lib/postgresql/data/
-    environment:
-      - "POSTGRES_HOST_AUTH_METHOD=trust"
+    # Pass credentials via env file; make sure .env.prod defines POSTGRES_*
+    env_file:
+      - ./.env.prod
   redis:
     container_name: "redis"
     restart: unless-stopped
@@ -37,23 +35,20 @@ services:
     volumes:
       - ./src:/code
     command: ['celery', '--workdir=/code', '-A', 'django_project', 'worker']
-    environment:
-      - "DEBUG=False"
-      - "DB_NAME=postgres"
-      - "DB_USER=postgres"
-      - "DB_PASSWORD=postgres"
-      - "DB_HOST=db"
-      - "DB_PORT=5432"
+    # Load the same production env vars as web
+    env_file:
+      - ./.env.prod
+    depends_on:
+      - redis
+      - db
   nginx:
     container_name: "nginx"
     image: nginx:1.23-alpine
     restart: unless-stopped
     ports:
       - "80:80"
-      - "443:443"
     volumes:
       - ./docker/nginx/logs:/var/log/nginx
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
-      - /etc/letsencrypt/archive/exchange.amgold.ru/:/certs
       - ./src/uploads:/uploads

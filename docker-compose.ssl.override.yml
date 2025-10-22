@@ -1,0 +1,10 @@
+# Compose override to add certificate mounts and 443 port for Nginx
+# Replace YOUR_DOMAIN_HERE or use scripts/enable_ssl.sh which generates a local copy.
+
+services:
+  nginx:
+    ports:
+      - "443:443"
+    volumes:
+      - /etc/letsencrypt/live/YOUR_DOMAIN_HERE/fullchain.pem:/certs/fullchain.pem:ro
+      - /etc/letsencrypt/live/YOUR_DOMAIN_HERE/privkey.pem:/certs/privkey.pem:ro
