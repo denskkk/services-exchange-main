@@ -1,0 +1,148 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{% endblock title %} – СВІЙ ДЛЯ СВОЇХ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Raleway:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+  <link rel="icon" type="image/svg+xml" href="{% static 'images/logo.svg' %}">
+  <link rel="alternate icon" type="image/png" href="{% static 'images/cta1.png' %}">
+  {% if not debug %}
+    <script async src="https://stats.hazadus.ru/script.js" data-website-id="3cab6bfb-b194-4677-9e10-0841ab0f6df1"></script>
+  {% endif %}
+</head>
+
+<body class="bg-beige text-ink antialiased">
+  <style>
+    /* Ensure hero image visible on desktop (>=768px), hidden on phones */
+    .desktop-image { display: none; }
+    @media (min-width: 768px) { .desktop-image { display: block; } }
+  </style>
+  <!-- Accent flag bar -->
+  <div class="h-1.5 bg-gradient-to-r from-ukraine-blue via-ukraine-blue to-ukraine-yellow"></div>
+  <div class="container max-w-screen-2xl mx-auto px-4 min-h-screen">
+    <div class="flex flex-col w-full">
+      <!-- Top Navbar -->
+      <div class="h-16 shrink-0 bg-white/80 supports-[backdrop-filter]:backdrop-blur border border-gray-100 rounded-xl mt-4 mb-2 px-2 flex items-center shadow-soft relative">
+        <!-- App title -->
+        <div class="flex mx-2 sm:mx-4 items-center">
+          <img src="{% static 'images/logo.svg' %}" alt="СВІЙ ДЛЯ СВОЇХ" class="mr-3 h-8 w-8">
+          <a href="{% url "core:index" %}" class="text-xl sm:text-2xl font-extrabold tracking-tight text-ink">СВІЙ ДЛЯ СВОЇХ</a>
+        </div>
+
+        <!-- Menu -->
+        <div class="flex-1 hidden md:flex justify-center items-center">
+          <!-- Переключение режима: я надаю послугу / я шукаю послугу -->
+          <a class="nav-link {% if user_mode == 'seller' %}!bg-soft-yellow !text-ink !font-semibold{% endif %}"
+             href="{% url 'exchange:set_user_mode' %}?mode=seller&redirect_to={{ request.path }}">Я надаю послугу</a>
+          <a class="nav-link mr-2 {% if user_mode == 'buyer' %}!bg-soft-yellow !text-ink !font-semibold{% endif %}"
+             href="{% url 'exchange:set_user_mode' %}?mode=buyer&redirect_to={{ request.path }}">Я шукаю послугу</a>
+
+          {% if user.is_authenticated %}
+            <a class="nav-link" href="{% url 'services:list' %}">Послуги</a>
+            {% if user_mode == 'seller' %}
+              <a class="nav-link" href="{% url 'services:my_list' %}">Мої послуги</a>
+            {% endif %}
+            <a class="nav-link" href="{% url 'users:recommendations' %}">Рекомендації</a>
+            <a class="nav-link" href="{% url 'exchange:category_list' %}">Рубрики</a>
+          {% else %}
+            <a class="nav-link" href="{% url 'services:list' %}">Послуги</a>
+            <a class="nav-link" href="{% url 'exchange:category_list' %}">Рубрики</a>
+          {% endif %}
+        </div>
+
+        <!-- User menu (desktop) -->
+        <div class="px-2 sm:px-4 items-center hidden md:flex">
+          {% if user.is_authenticated %}
+            <a href="{% url 'users:public_profile' user.username %}">
+              {% if user.profile_image %}
+                <img src="{{ user.profile_image.url }}" class="h-8 w-8 rounded-lg mx-1 ring-2 ring-soft-yellow" alt="{{ user.username }}">
+              {% else %}
+                <div class="h-8 w-8 rounded-lg mx-1 bg-soft-yellow text-ink inline-flex items-center justify-center">{{ user.username|slice:"0:2" }}</div>
+              {% endif %}
+            </a>
+            <span class="p-2 font-medium">
+              <a href="{% url 'users:public_profile' user.username %}" class="hover:underline">{{ user.username }}</a>
+            </span>
+            <a href="{% url 'users:update' user.pk %}" class="icon-btn">
+              {% include "icons/icon_gear.html" with size="24" color="#6b7280" %}
+            </a>
+            <a href="{% url 'users:update_balance' %}" class="icon-btn">
+              {% include "icons/icon_wallet.html" with size="24" color="#6b7280" %}
+            </a>
+            <a href="{% url 'account_logout' %}" class="icon-btn">
+              {% include "icons/icon_logout.html" with size="24" color="#6b7280" %}
+            </a>
+          {% else %}
+            <a href="{% url 'account_signup' %}" class="btn btn-primary">Реєстрація</a>
+            <a href="{% url 'account_login' %}" class="btn btn-ghost">Вхід</a>
+          {% endif %}
+        </div>
+
+        <!-- Hamburger (mobile) -->
+        <div class="ml-auto md:hidden">
+          <details class="group relative">
+            <summary class="list-none flex items-center justify-center w-10 h-10 rounded-lg hover:bg-gray-50 cursor-pointer select-none">
+              <svg class="w-6 h-6 text-ink" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+            </summary>
+            <!-- Backdrop -->
+            <div class="hidden group-open:block fixed inset-0 z-40 bg-black/30"></div>
+            <!-- Drawer -->
+            <div class="hidden group-open:block fixed left-1/2 -translate-x-1/2 top-16 z-50 w-[96vw] max-w-md h-[60vh] min-h-[360px] overflow-y-auto p-4 bg-white/95 supports-[backdrop-filter]:backdrop-blur border border-gray-100 rounded-2xl shadow-elevated space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-ink">Меню</span>
+                <span class="text-xs text-gray-500">Натисніть знову на ☰, щоб закрити</span>
+              </div>
+              <!-- Mode toggle -->
+              <div class="grid grid-cols-2 gap-2">
+                <a class="nav-link text-center {% if user_mode == 'seller' %}!bg-soft-yellow !text-ink !font-semibold{% endif %}" href="{% url 'exchange:set_user_mode' %}?mode=seller&redirect_to={{ request.path }}">Я надаю послугу</a>
+                <a class="nav-link text-center {% if user_mode == 'buyer' %}!bg-soft-yellow !text-ink !font-semibold{% endif %}" href="{% url 'exchange:set_user_mode' %}?mode=buyer&redirect_to={{ request.path }}">Я шукаю послугу</a>
+              </div>
+              <!-- Nav links -->
+              <div class="grid gap-2">
+                <a class="nav-link text-center" href="{% url 'services:list' %}">Послуги</a>
+                {% if user.is_authenticated %}
+                  {% if user_mode == 'seller' %}
+                    <a class="nav-link text-center" href="{% url 'services:my_list' %}">Мої послуги</a>
+                  {% endif %}
+                  <a class="nav-link text-center" href="{% url 'users:recommendations' %}">Рекомендації</a>
+                  <a class="nav-link text-center" href="{% url 'exchange:category_list' %}">Рубрики</a>
+                  <div class="grid grid-cols-3 gap-2 pt-1">
+                    <a href="{% url 'users:update' user.pk %}" class="icon-btn flex items-center justify-center">{% include "icons/icon_gear.html" with size="22" color="#6b7280" %}</a>
+                    <a href="{% url 'users:update_balance' %}" class="icon-btn flex items-center justify-center">{% include "icons/icon_wallet.html" with size="22" color="#6b7280" %}</a>
+                    <a href="{% url 'account_logout' %}" class="icon-btn flex items-center justify-center">{% include "icons/icon_logout.html" with size="22" color="#6b7280" %}</a>
+                  </div>
+                {% else %}
+                  <a class="nav-link text-center" href="{% url 'exchange:category_list' %}">Рубрики</a>
+                  <div class="grid grid-cols-2 gap-2">
+                    <a href="{% url 'account_signup' %}" class="btn btn-primary">Реєстрація</a>
+                    <a href="{% url 'account_login' %}" class="btn btn-ghost">Вхід</a>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <!-- Content -->
+
+      <div class="p-4 sm:p-8 mb-8" style="min-height: calc(100vh - 2*64px - 100px);">
+        {% block content %}
+        {% endblock content %}
+      </div>
+
+      <!-- Footer -->
+      {% include "footer.html" %}
+    </div>
+  </div>
+</body>
+
+</html>

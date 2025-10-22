@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+
+{% block title %}
+  {{ project.title }}
+{% endblock %}
+
+{% block content %}
+  <section class="mx-auto max-w-4xl mb-16">
+    <div class="border border-gray-100 p-4 mb-4">
+      <div class="flex items-center">
+        <h1 class="flex-1 text-xl font-semibold mb-2 text-green-600">{{ project.title }}</h1>
+        <span class="text-xl text-green-600">Бюджет: {{ project.price }} ₴</span>
+      </div>
+
+      <div class="flex mb-2 items-center">
+        <div class="flex-1">
+          <a href="{% url 'projects:list' %}?category_id={{ project.category.pk }}" class="text-gray-500 hover:underline">
+            {{ project.category }}
+          </a>
+        </div>
+        {% if project.is_higher_price_allowed %}
+          <div class="text-gray-500">
+            Макс. бюджет: {{ project.max_price }} ₴
+          </div>
+        {% endif %}
+      </div>
+
+      {% if messages %}
+        {% for message in messages %}
+          {% if message.extra_tags == 'warning' %}
+            {% include "alert.html" with message=message style="warning" %}
+          {% else %}
+            {% include "alert.html" with message=message style="success" %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+
+      <p class="mb-4">
+        {{ project.description|linebreaksbr }}
+      </p>
+
+      <!-- MARK: О покупателе -->
+      <div class="flex mb-2">
+        <a href="{% url 'users:public_profile' project.customer.username %}">
+          {% if project.customer.profile_image %}
+            <img src="{{ project.customer.profile_image.url }}" class="h-16 w-16 mx-1" alt="{{ project.customer.username }}">
+          {% else %}
+            <div class="h-16 w-16 mx-1 bg-gray-200"></div>
+          {% endif %}
+        </a>
+        <div class="flex flex-col px-2">
+          <span>Покупатель: <a href="{% url 'users:public_profile' project.customer.username %}" class="hover:underline">{{ project.customer.username }}</a></span>
+          <span>Размещено проєктов на бирже: {{ project.customer.projects.count }}</span>
+        </div>
+      </div>
+
+      <!-- Кол-во откликов / кнопки -->
+      <div class="flex items-center">
+        <div class="flex-1 text-sm text-gray-500 font-thin">
+          Переглядов: {{ total_views }} &middot; Предложений: {{ project.offers.count }}{# Тут будут все предложения, включая уже отклоненные. #}
+        </div>
+        <div>
+          {% if user == project.customer and not order %}
+            <!-- Кнопки для управления проєктом -->
+            <a href="{% url 'projects:update' project.pk %}" class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800">Змінити</a>
+            <a href="{% url 'projects:delete' project.pk %}" class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-red-700 rounded-lg focus:ring-4 focus:ring-red-200 hover:bg-red-800">Видалити</a>
+          {% else %}
+            <!-- Кнопка подачи заявки -->
+            {% if not offers.count and not order %}
+              <form action="{% url 'projects:offer_create' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="project_id" value="{{ project.pk }}">
+                <button class="mb-1 w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Предложить услугу</button>
+              </form>
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    {% if order %}
+      <!-- MARK: Инфо о замовленняе на проєкт (видно только замовнику и исполнителю) -->
+      <div class="border border-gray-100 p-4 mb-4">
+        <div class="flex items-center">
+          <div class="flex-1">
+            <span class="text-xl">{{ order }}</span> <span class="text-gray-500">&middot; {{ order.get_status_display }}</span>
+          </div>
+          <div>
+            <a href="{% url 'orders:detail' order.pk %}" class="mb-1 w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Перейти к замовленняу</a>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    {% if offers.count %}
+      <!-- MARK: Предложения по проєкту -->
+      <div class="border border-gray-100 p-4 mb-4">
+        {% if user == project.customer %}
+          {# Для замовника проєкта показываем все предложения #}
+          <h1 class="text-xl font-semibold mb-2">Предложения исполнителей</h1>
+          
+          {% if user.balance < project.price and project.is_active %}
+            {% include "alert.html" with message="На вашому балансі недостатньо коштів, чтобы принять заявку на выполнение проєкта." style="warning" %}
+          {% endif %}
+
+          <div class="flex flex-col">
+            {% for offer in offers %}
+              <div class="flex p-2 mb-2 bg-gray-100">
+                <!-- Аватарка -->
+                {% if offer.candidate.profile_image %}
+                  <a href="{% url 'users:public_profile' offer.candidate.username %}">
+                    <img src="{{ offer.candidate.profile_image.url }}" class="h-16 w-16 mx-1 rounded-full" alt="{{ offer.candidate.username }}">
+                  </a>
+                {% else %}
+                  <span class="h-16 w-16 mx-1 bg-gray-200 rounded-full"></span>
+                {% endif %}
+                <!-- Инфо -->
+                <div class="flex items-center px-2 flex-1">
+                  <div class="flex flex-col flex-1">
+                    <span>
+                      <a href="{% url 'users:public_profile' offer.candidate.username %}" class="hover:underline">
+                        {{ offer.candidate.username }}
+                      </a>
+                    </span>
+                    <span class="text-gray-500">
+                      Создано {{ offer.created }}
+                    </span>
+                  </div>
+                  <!-- Кнопки / инфо об отмене -->
+                  <div class="flex">
+                    {% if offer.is_cancelled or offer.status == 'accepted' %}
+                      <span class="text-sm text-gray-500">{{ offer.get_status_display }}</span>
+                    {% else %}
+                      <!-- Кнопка "Принять" замовником -->
+                      <form action="{% url 'projects:offer_set_status' offer.pk %}" method="POST" class="mr-1">
+                        {% csrf_token %}
+                        <input type="hidden" name="new_status" value="accepted">
+                        <button class="w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Принять</button>
+                      </form>
+                      <!-- Кнопка "Отклонить" замовником -->
+                      <form action="{% url 'projects:offer_set_status' offer.pk %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="new_status" value="declined">
+                        <button class="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Отклонить</button>
+                      </form>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          {# Для остальных пользователей показываем только их предложение #}
+          {% if offers.count %}
+            <div class="flex items-center">
+              <div class="flex-1">
+                <div>Вы разместили предложениe {{ offers.0.created }}.</div>
+                <div>Статус: {{ offers.0.get_status_display }}.</div>
+              </div>
+              <!-- Кнопки управления предложением - если оно не скасованоо -->
+              {% if offers.0.is_cancelled or offers.0.status == 'accepted' %}
+                <span class="text-sm text-gray-500">{{ offers.0.get_status_display }}</span>
+              {% else %}
+                <div>
+                  <form action="{% url 'projects:offer_set_status' offers.0.pk %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="new_status" value="cancelled">
+                    <button class="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Скасувати предложение</button>
+                  </form>
+                </div>
+              {% endif %}
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+    {% endif %}
+  </section>
+{% endblock content %}

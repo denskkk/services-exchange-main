@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Мои замовлення
+{% endblock %}
+
+{% block content %}
+  <section class="mx-auto max-w-5xl">
+    <h1 class="text-3xl font-semibold mb-4">Мої замовлення</h1>
+
+  {% if user_mode == 'buyer' %}
+    {% include "alert.html" with message="У вас обрано режим &laquo;Я покупець&raquo;, тому ви бачите тільки замовлені вами послуги." style="info" %}
+  {% else %}
+    {% include "alert.html" with message="У вас обрано режим &laquo;Я продавець&raquo;, тому ви бачите тільки замовлені у вас послуги." style="info" %}
+  {% endif %}
+
+    <h2 class="text-2xl font-semibold mb-2">В роботі</h2>
+    <div class="mb-4 pb-4 border-b border-gray-100">
+      {% for order in order_list %}
+        {% if order.status == 'created' or order.status == 'in_progress' or order.status == 'submitted_by_provider' %}
+          <div>
+            <a href="{% url 'orders:detail' order.pk %}" class="hover:underline">
+              {{ order }} &middot; {{ order.item.title }}
+            </a> <span class="text-gray-500">&middot; {{ order.get_status_display }}</span>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <h2 class="text-2xl font-semibold mb-2">Завершеноы</h2>
+    <div class="mb-4 pb-4 border-b border-gray-100">
+      {% for order in order_list %}
+        {% if order.is_completed %}
+          <div>
+            <a href="{% url 'orders:detail' order.pk %}" class="hover:underline">
+              {{ order }} &middot; {{ order.item.title }}
+            </a> <span class="text-gray-500">&middot; {{ order.get_status_display }}</span>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <h2 class="text-2xl font-semibold mb-2">Отменены</h2>
+    <div class="mb-8">
+      {% for order in order_list %}
+        {% if order.is_cancelled %}
+          <div>
+            <a href="{% url 'orders:detail' order.pk %}" class="hover:underline">
+              {{ order }} &middot; {{ order.item.title }}
+            </a> <span class="text-gray-500">&middot; {{ order.get_status_display }}</span>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </section>
+{% endblock content %}

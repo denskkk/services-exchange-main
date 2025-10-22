@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Запропонувати категорію{% endblock %}
+
+{% block content %}
+<section class="mx-auto max-w-2xl">
+  <h1 class="text-2xl font-extrabold text-ink font-display mb-6">Запропонувати нову категорію</h1>
+  <div class="bg-white rounded-2xl border border-accent-gray/70 shadow-soft p-6">
+    <form method="post" class="space-y-4">
+      {% csrf_token %}
+      <div>
+        <label class="block text-sm font-medium text-ink mb-1">Назва</label>
+        {{ form.title }}
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-ink mb-1">Батьківська категорія (необов'язково)</label>
+        {{ form.parent }}
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-ink mb-1">Опис</label>
+        {{ form.description }}
+      </div>
+      <div class="pt-2">
+        <button type="submit" class="btn btn-primary">Надіслати на модерацію</button>
+        <a href="{% url 'exchange:category_list' %}" class="btn btn-ghost">Скасувати</a>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock content %}

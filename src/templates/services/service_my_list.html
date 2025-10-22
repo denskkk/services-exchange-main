@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Мої послуги
+{% endblock %}
+
+{% block content %}
+  <section class="mx-auto max-w-5xl">
+    <div class="flex items-center mb-4">
+      <h1 class="text-2xl font-semibold flex-1">Мої послуги</h1>
+      {% if user_mode == 'seller' %}
+        <a class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800" href="{% url 'services:create' %}">Створити послугу</a>
+      {% else %}
+        {% include "alert.html" with message="Ви у режимі 'Я шукаю послугу'. Перемкніть у 'Я надаю послугу', щоб створити послугу." style="info" %}
+      {% endif %}
+    </div>
+
+    <div>
+      {% if not service_list.count %}
+        {% include "alert.html" with message="Ви поки не розмістили на сайті жодної послуги." style="info" %}
+      {% endif %}
+
+      {% for service in service_list %}
+        <div class="flex border border-gray-100 mb-2 shadow-md">
+          {# Обложка #}
+          {% if service.image %}
+            <img src="{{ service.image.url }}" class="h-36 w-64 object-cover" />
+          {% else %}
+            <div class="p-0 m-0 h-36 w-64 bg-gray-50"></div>
+          {% endif %}
+          {# Инфо об услуге #}
+          <div class="flex flex-col flex-1 p-4">
+            <div class="flex items-center mb-2">
+              <div class="flex-1">
+                <a href="{% url 'services:detail' service.pk %}" class="text-xl font-medium hover:underline">{{ service.title }}</a>
+              </div>
+              <div class="text-xl text-green-600">{{ service.price }} ₴</div>
+            </div>
+
+            <div class="flex items-center mb-2">
+              <div class="flex-1">
+                <a href="{% url 'services:list' %}?category_id={{ service.category.pk }}" class="text-gray-500 hover:underline">
+                  {{ service.category }}
+                </a>
+              </div>
+              <div>{{ service.term }} дней</div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock content %}

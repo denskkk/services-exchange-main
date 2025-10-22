@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Видалити проєкт
+{% endblock %}
+
+{% block content %}
+  <section class="mx-auto max-w-5xl">
+    <h1 class="text-xl font-semibold mb-2">Видалити проєкт</h1>
+
+    <div class="mb-4 p-4">
+      <form action="" method="post">
+        {% csrf_token %}
+
+        <p class="text-red-500">
+          Вы уверены, что хотите удалить проєкт &laquo;{{ project.title }}&raquo;?
+        </p>
+
+        <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 text-sm font-medium text-center text-white bg-red-700 rounded-lg focus:ring-4 focus:ring-red-200 hover:bg-red-800">
+          Видалити
+        </button>
+        <a href="{% url 'projects:detail' project.pk %}" class="inline-flex items-center px-5 py-2.5 mt-4 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800">
+          Назад
+        </a>
+      </form>
+    </div>
+  </section>
+{% endblock content %}

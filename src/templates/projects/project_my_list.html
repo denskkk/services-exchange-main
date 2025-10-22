@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Мої проєкти
+{% endblock %}
+
+{% block content %}
+  <section class="mx-auto max-w-5xl">
+    <div class="flex items-center mb-4">
+      <h1 class="text-2xl font-semibold flex-1">Мої проєкти</h1>
+      <a class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800" href="{% url 'projects:create' %}">Створити проєкт</a>
+    </div>
+
+    <div>
+      {% if not project_list.count %}
+        {% include "alert.html" with message="Вы пока не разместили на сайти ни одного проєкта." style="info" %}
+      {% endif %}
+
+      {% for project in project_list %}
+        <div class="p-4 border border-gray-100 mb-2 shadow-md">
+          <div class="flex mb-2 items-center">
+            <div class="flex-1">
+              <a href="{% url 'projects:detail' project.pk %}" class="text-xl font-medium hover:underline">{{ project.title }}</a>
+            </div>
+            <div class="text-xl text-green-600">
+              {{ project.price }} ₴
+            </div>
+          </div>
+          <div class="mb-1">
+            <a href="{% url 'projects:list' %}?category_id={{ project.category.pk }}" class="text-gray-500 hover:underline">
+              {{ project.category }}
+            </a>
+          </div>
+          <div>
+            {% if project.offer_count %}<span class="text-green-600">Активных предложений: {{ project.offer_count }}</span>{% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock content %}

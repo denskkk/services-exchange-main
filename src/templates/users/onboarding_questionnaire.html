@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{%  load tailwind_filters %}
+
+{% block title %}Анкета рекомендацій{% endblock title %}
+
+{% block content %}
+  <section class="mx-auto max-w-3xl">
+    <h1 class="text-2xl font-semibold mb-4">Анкета для підбору послуг</h1>
+    <p class="text-gray-600 mb-6">Відповіді допоможуть підібрати корисні послуги саме для вас. Ви завжди можете змінити ці налаштування.</p>
+
+    <form method="post" action="{% url 'users:onboarding' %}">
+      {% csrf_token %}
+      <div class="space-y-6">
+        <div>
+          <h2 class="text-lg font-semibold mb-2">Склад сім'ї</h2>
+          {{ form.household_adults|as_crispy_field }}
+          {{ form.household_children|as_crispy_field }}
+          {{ form.has_infants|as_crispy_field }}
+        </div>
+        <div>
+          <h2 class="text-lg font-semibold mb-2">Тварини</h2>
+          {{ form.pets_dogs|as_crispy_field }}
+          {{ form.pets_cats|as_crispy_field }}
+          {{ form.pets_other|as_crispy_field }}
+        </div>
+        <div>
+          <h2 class="text-lg font-semibold mb-2">Житло</h2>
+          {{ form.dwelling_type|as_crispy_field }}
+          {{ form.dwelling_rooms|as_crispy_field }}
+          {{ form.dwelling_area|as_crispy_field }}
+          {{ form.has_garden|as_crispy_field }}
+        </div>
+        <div>
+          <h2 class="text-lg font-semibold mb-2">Транспорт</h2>
+          {{ form.car_owner|as_crispy_field }}
+          {{ form.bike_owner|as_crispy_field }}
+        </div>
+        <div>
+          <h2 class="text-lg font-semibold mb-2">Доступність</h2>
+          {{ form.availability_weekdays|as_crispy_field }}
+          {{ form.availability_weekends|as_crispy_field }}
+          {{ form.availability_evenings|as_crispy_field }}
+        </div>
+        <div>
+          <h2 class="text-lg font-semibold mb-2">Бюджет</h2>
+          {{ form.budget_min|as_crispy_field }}
+          {{ form.budget_max|as_crispy_field }}
+        </div>
+        <div>
+          <h2 class="text-lg font-semibold mb-2">Мови</h2>
+          {{ form.language_uk|as_crispy_field }}
+          {{ form.language_ru|as_crispy_field }}
+          {{ form.language_en|as_crispy_field }}
+          {{ form.language_other|as_crispy_field }}
+        </div>
+        <div>
+          <h2 class="text-lg font-semibold mb-2">Інтереси</h2>
+          {{ form.interested_home|as_crispy_field }}
+          {{ form.interested_children|as_crispy_field }}
+          {{ form.interested_pets|as_crispy_field }}
+          {{ form.interested_auto|as_crispy_field }}
+          {{ form.interested_it|as_crispy_field }}
+          {{ form.interested_marketing|as_crispy_field }}
+          {{ form.interested_translation|as_crispy_field }}
+          {{ form.interested_admin|as_crispy_field }}
+        </div>
+        <div>
+          <h2 class="text-lg font-semibold mb-2">Переваги</h2>
+          {{ form.prefer_online|as_crispy_field }}
+          {{ form.prefer_verified|as_crispy_field }}
+        </div>
+        <div>
+          {{ form.notes|as_crispy_field }}
+        </div>
+      </div>
+      <div class="mt-4 flex gap-2">
+        <button type="submit" class="btn btn-primary">Зберегти та показати рекомендації</button>
+        <a href="{% url 'users:recommendations' %}" class="btn btn-ghost">Перейти до рекомендацій</a>
+      </div>
+    </form>
+  </section>
+{% endblock content %}

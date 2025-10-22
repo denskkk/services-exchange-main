@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Каталог всіх послуг на сайті
+{% endblock %}
+
+{% block content %}
+  <section class="bg-light-bg py-8 md:py-12">
+    <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {% if search %}
+        <h1 class="text-3xl md:text-4xl font-bold text-dark-text mb-8 text-center">Пошук за запитом &laquo;{{ search }}&raquo;</h1>
+      {% else %}
+        {% if category %}
+          <div class="text-center">
+            <p class="text-lg text-medium-gray mb-2">{{ category }}</p>
+            <h1 class="text-3xl md:text-4xl font-bold text-dark-text mb-8">{{ category.title }}</h1>
+          </div>
+        {% else %}
+          <h1 class="text-3xl md:text-4xl font-bold text-dark-text mb-8 text-center">Каталог послуг</h1>
+        {% endif %}
+      {% endif %}
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <!-- Left column - filters -->
+        <aside class="lg:col-span-3">
+          <div class="sticky top-8 p-6 bg-white rounded-2xl shadow-sm border border-accent-gray">
+            <h2 class="text-2xl font-semibold text-dark-text mb-5">Рубрики</h2>
+            <ul class="space-y-3">
+              <li>
+                <a href="{% url 'services:list' %}" class="flex justify-between items-center text-dark-text hover:text-brand-blue transition-colors duration-300">
+                  <span>Усі</span>
+                </a>
+              </li>
+              {% for cat in categories %}
+                <li>
+                  <a href="{% url 'services:list' %}?category_id={{ cat.pk }}" class="flex justify-between items-center text-dark-text hover:text-brand-blue transition-colors duration-300">
+                    <span>{{ cat.title }}</span>
+                    <span class="text-sm bg-accent-gray text-medium-gray rounded-full px-2 py-0.5">{{ cat.service_count }}</span>
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </aside>
+
+        <!-- Right column - services -->
+        <main class="lg:col-span-9">
+          <!-- Search and count -->
+          <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+            <div class="w-full md:max-w-md">
+              {% include "search_form.html" with search=search %}
+            </div>
+            <div class="text-medium-gray mt-4 md:mt-0">
+              Знайдено: {{ service_list.count }}
+            </div>
+          </div>
+
+          {% if service_list.count %}
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+              {% for service in service_list %}
+                <!-- Service card -->
+                <div class="flex flex-col bg-white border border-accent-gray rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                  <!-- Cover -->
+                  <div class="relative h-52">
+                    <a href="{% url 'services:detail' service.pk %}">
+                      {% if service.image %}
+                        <img src="{{ service.image.url }}" class="w-full h-full object-cover" alt="{{ service.title }}" />
+                      {% else %}
+                        <div class="w-full h-full bg-light-gray flex items-center justify-center">
+                          <svg class="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l-1.586-1.586a2 2 0 00-2.828 0L6 14m6-6l.01.01"></path></svg>
+                        </div>
+                      {% endif %}
+                    </a>
+                  </div>
+                  <!-- Content -->
+                  <div class="p-4 flex flex-col flex-grow">
+                    <div class="flex-grow mb-4">
+                      <a href="{% url 'services:detail' service.pk %}" class="text-lg font-semibold text-dark-text hover:text-brand-blue transition-colors line-clamp-2" title="{{ service.title }}">
+                        {{ service.title }}
+                      </a>
+                    </div>
+                    
+                    <div class="text-sm text-medium-gray mb-4">
+                      <a class="hover:underline" href="{% url 'services:list' %}?category_id={{ service.category.pk }}">
+                        {{ service.category.title }}
+                      </a>
+                    </div>
+
+                    <div class="text-2xl text-brand-blue font-bold mb-4">{{ service.price }} ₴</div>
+                    
+                    <!-- Provider info -->
+                    <div class="pt-4 border-t border-accent-gray flex items-center">
+                      <a href="{% url 'users:public_profile' service.provider.username %}" class="flex-shrink-0">
+                        {% if service.provider.profile_image %}
+                          <img src="{{ service.provider.profile_image.url }}" class="h-10 w-10 rounded-full object-cover" alt="{{ service.provider.username }}">
+                        {% else %}
+                          <div class="h-10 w-10 rounded-full bg-light-gray flex items-center justify-center text-medium-gray font-semibold">
+                            {{ service.provider.username|first|upper }}
+                          </div>
+                        {% endif %}
+                      </a>
+                      <div class="ml-3">
+                        <a href="{% url 'users:public_profile' service.provider.username %}" class="font-semibold text-dark-text hover:underline">{{ service.provider.username }}</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="text-center py-16 px-6 bg-white rounded-2xl border border-accent-gray">
+                <h3 class="text-2xl font-semibold text-dark-text mb-2">Нічого не знайдено</h3>
+                <p class="text-medium-gray">Спробуйте змінити фільтри або пошуковий запит.</p>
+            </div>
+          {% endif %}
+        </main>
+      </div>
+    </div>
+  </section>
+{% endblock %}

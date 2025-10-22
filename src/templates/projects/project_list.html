@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Біржа проєктов
+{% endblock %}
+
+{% block content %}
+  <section class="mx-auto max-w-6xl">
+    {% if search %}
+      <h1 class="text-2xl font-semibold mb-8">Пошук проєктов по запросу &laquo;{{ search }}&raquo;</h1>
+    {% else %}
+      {% if category %}
+        <div class="text-gray-500 mb-4">{{ category }}</div>
+        <h1 class="text-2xl font-semibold mb-8">{{ category.title }}</h1>
+      {% else %}
+        <h1 class="text-2xl font-semibold mb-8">Біржа проєктов</h1>
+      {% endif %}
+    {% endif %}
+
+    <div class="text-gray-500 mb-4">{{ project_list.count }} результатов</div>
+    <div class="grid grid-cols-12 gap-5">
+      <!-- Left column 1/3 - filters -->
+      <div class="col-span-3 flex flex-col">
+        <div class="p-4 bg-gray-100 rounded-md shadow-md">
+          <h2 class="text-xl font-medium mb-2">Рубрики</h2>
+          <ul>
+            <li><a href="{% url 'projects:list' %}" class="hover:underline">Усі</a></li>
+            {% for cat in categories %}
+              <li><a href="{% url 'projects:list' %}?category_id={{ cat.pk }}" class="hover:underline">{{ cat.title }}</a> <span class="text-gray-500">({{ cat.project_count }})</span></li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+
+      <!-- Right column 3/4 - projects -->
+      <div class="col-span-9">
+        <!-- MARK: Строка поиска  -->
+        {% include "search_form.html" with search=search %}
+
+        {% if project_list.count %}
+          <div class="flex flex-col">
+            {% for project in project_list %}
+              <!-- MARK: Карточка проєкта -->
+              <div class="flex flex-col p-4 mb-4 border border-gray-100 hover:shadow-md rounded-lg">
+                <div class="flex mb-1">
+                  <a class="flex-1 text-xl font-medium hover:underline" href="{% url 'projects:detail' project.pk %}">{{ project.title }}</a>
+                  <div class="text-xl text-green-500">{{ project.price }} ₴</div>
+                </div>
+                {% if not category %}
+                  <a class="text-gray-500 mb-2 hover:underline" href="{% url 'projects:list' %}?category_id={{ project.category.pk }}">{{ project.category }}</a>
+                {% endif %}
+                <div class="flex">
+                  <a href="{% url 'users:public_profile' project.customer.username %}">
+                    {% if project.customer.profile_image %}
+                      <img src="{{ project.customer.profile_image.url }}" class="h-16 w-16" alt="{{ project.customer.username }}">
+                    {% else %}
+                      <div class="h-16 w-16 mx-1 bg-gray-200"></div>
+                    {% endif %}
+                  </a>
+                  <div class="flex flex-col px-2">
+                    <span>Покупатель: <a href="{% url 'users:public_profile' project.customer.username %}" class="hover:underline">{{ project.customer.username }}</a></span>
+                    <span>Размещено проєктов на бирже: {{ project.customer.projects.count }}</span>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          {% include "alert.html" with message="Не найдено ни одной послуги, удовлетворяющей запросу. Попробуйте изменить фильтры, или выбрать другую рубрику." style="info" %}
+        {% endif %}
+      </div>
+    </div>
+  </section>
+{% endblock content %}

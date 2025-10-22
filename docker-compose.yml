@@ -1,0 +1,59 @@
+version: "3.9"
+services:
+  web:
+    container_name: "web"
+    restart: unless-stopped
+    build: ./src
+    command: gunicorn django_project.wsgi -b 0.0.0.0:8000 --workers=2 --threads=4 --worker-class=gthread
+    volumes:
+      - ./src:/code
+    environment:
+      - "DEBUG=False"
+      - "DB_NAME=postgres"
+      - "DB_USER=postgres"
+      - "DB_PASSWORD=postgres"
+      - "DB_HOST=db"
+      - "DB_PORT=5432"
+    depends_on:
+      - db
+  db:
+    container_name: "db"
+    restart: unless-stopped
+    image: postgres:16
+    volumes:
+      - ./docker/postgres:/var/lib/postgresql/data/
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+  redis:
+    container_name: "redis"
+    restart: unless-stopped
+    image: redis:7.2.4
+    volumes:
+      - ./docker/redis:/data
+  worker:
+    container_name: "worker"
+    restart: unless-stopped
+    build: ./src
+    volumes:
+      - ./src:/code
+    command: ['celery', '--workdir=/code', '-A', 'django_project', 'worker']
+    environment:
+      - "DEBUG=False"
+      - "DB_NAME=postgres"
+      - "DB_USER=postgres"
+      - "DB_PASSWORD=postgres"
+      - "DB_HOST=db"
+      - "DB_PORT=5432"
+  nginx:
+    container_name: "nginx"
+    image: nginx:1.23-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx/logs:/var/log/nginx
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - /etc/letsencrypt/archive/exchange.amgold.ru/:/certs
+      - ./src/uploads:/uploads

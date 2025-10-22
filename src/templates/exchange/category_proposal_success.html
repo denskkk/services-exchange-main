@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Категорія на модерації{% endblock %}
+
+{% block content %}
+<section class="mx-auto max-w-2xl text-center">
+  <div class="bg-white rounded-2xl border border-accent-gray/70 shadow-soft p-8">
+    <h1 class="text-2xl font-extrabold text-ink font-display">Дякуємо за пропозицію!</h1>
+    <p class="mt-3 text-ink/70">Категорію <strong>{{ proposal.title }}</strong> надіслано на модерацію. Ми повідомимо вас після прийняття рішення.</p>
+    <div class="mt-6 flex gap-3 justify-center">
+      <a href="{% url 'exchange:category_list' %}" class="btn btn-primary">Повернутись до рубрик</a>
+      <a href="{% url 'core:index' %}" class="btn btn-ghost">На головну</a>
+    </div>
+  </div>
+</section>
+{% endblock content %}

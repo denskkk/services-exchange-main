@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}Профіль {{ public_user.username }}{% endblock title %}
+
+{% block content %}
+  <section class="mx-auto max-w-6xl">
+    <h1 class="text-2xl font-semibold mb-8">Публичный профиль пользователя</h1>
+
+    <div class="flex flex-col-reverse px-2 md:px-0 md:grid md:grid-cols-12 mb-8">
+      <!-- MARK: Profile picture, username, etc -->
+      <div class="col-span-3 flex flex-col pr-2">
+        {% if public_user.profile_image %}
+          <img src="{{ public_user.profile_image.url }}" class="w-64 h-64 rounded-full mx-auto mb-4" alt="{{ public_user.username }}">
+        {% else %}
+          <div class="w-64 h-64 rounded-full mx-auto mb-4 bg-gray-200"></div>
+        {% endif %}
+        <div class="text-xl font-medium px-4 mb-2">{{ public_user.username }}</div>
+        {% if user == public_user %}
+          <div class="px-4">Баланс: <span class="text-green-600">{{ public_user.balance }} ₴</span></div>
+          <span class="mb-2 px-4 text-sm font-light text-gray-500">Баланс видно лише вам</span>
+        {% endif %}
+        {% if public_user.location %}
+          <div class="px-4 mb-1">{{ public_user.location }}</div>
+        {% endif %}
+        <div class="px-4">На сайті з {{ public_user.date_joined|date }}</div>
+      </div>
+
+      <!-- MARK: Detailed user info -->
+      <div class="col-span-9">
+        <h2 class="text-2xl font-medium mb-2">{% if public_user.full_name  %}{{ public_user.full_name }}{% else %}Имя не указано{% endif %}</h2>
+        <h3 class="text-xl font-medium mb-2">{% if public_user.speciality %}{{ public_user.speciality }}{% else %}Специальность не указана{% endif %}</h3>
+        <p class="mb-8">
+          {% if public_user.description %}
+            {{ public_user.description|linebreaksbr }}
+          {% else %}
+            Пользователь не указал никакой информации о себе и своём опыте.
+          {% endif %}
+        </p>
+
+        <h3 class="text-xl font-medium mb-2">Навыки</h3>
+        <div class="flex flex-wrap">
+          {% for skill in public_user.skills %}
+            <div class="py-2 px-4 mb-1 mr-2 rounded-full bg-gray-200 cursor-default">{{ skill }}</div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <h1 class="text-2xl font-semibold mb-4">Послуги користувача</h1>
+    {% if public_user.services.count == 0 %}
+      <p class="mb-8">Поки користувач не розмістив жодних послуг.</p>
+    {% else %}
+      <div class="flex flex-col mb-8">
+        {% for service in public_user.services.all %}
+          <div>
+            <a href="{% url 'services:detail' service.pk %}" class="hover:underline">
+              {{ service.title }}
+            </a> &middot;
+            <a href="{% url 'services:list' %}?category_id={{ service.category.pk }}" class="text-gray-500 hover:underline">{{ service.category.title }}</a> &middot;
+            {{ service.price }} ₴ &middot; за {{ service.term }} дн.
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <h1 class="text-2xl font-semibold mb-4">Проєкти користувача</h1>
+    {% if public_user.projects.count == 0 %}
+      <p class="mb-8">Поки користувач не розмістив жодних проєктів.</p>
+    {% else %}
+      <div class="flex flex-col mb-8">
+        {% for project in public_user.projects.all %}
+          <div>
+            <a href="{% url 'projects:detail' project.pk %}" class="hover:underline">
+              {{ project.title }}
+            </a> &middot;
+            <a href="{% url 'projects:list' %}?category_id={{ project.category.pk }}" class="text-gray-500 hover:underline">{{ project.category.title }}</a> &middot;
+            {{ project.price }} ₴
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if actions_services_viewed %}
+      {# Видит только "хозяин" профиля #}
+      <h1 class="text-2xl font-semibold mb-4">Недавно просмотренные послуги <span class="text-sm font-light text-gray-500">Видно только вам</span></h1>
+      <div class="mb-8 flex flex-col">
+        {% for action in actions_services_viewed %}
+          <div>
+            <a href="{% url 'services:detail' action.target.pk %}" class="hover:underline">
+              {{ action.target }}
+            </a> &middot; <span class="text-gray-500">просмотрено {{ action.created }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if actions_projects_viewed %}
+      {# Видит только "хозяин" профиля #}
+      <h1 class="text-2xl font-semibold mb-4">Недавно просмотренные проєкти <span class="text-sm font-light text-gray-500">Видно только вам</span></h1>
+      <div class="mb-8 flex flex-col">
+        {% for action in actions_projects_viewed %}
+          <div>
+            <a href="{% url 'projects:detail' action.target.pk %}" class="hover:underline">
+              {{ action.target }}
+            </a> &middot; <span class="text-gray-500">просмотрено {{ action.created }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <h1 class="text-2xl font-semibold mb-4">Отзывы о {{ public_user.username }}</h1>
+    <p class="mb-8">Пока нет ни одного отзыва о работе пользователя.</p>
+  </section>
+{% endblock content %}

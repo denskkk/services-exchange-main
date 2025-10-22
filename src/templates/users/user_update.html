@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{%  load tailwind_filters %}
+
+{% block title %}Налаштування профиля{% endblock title %}
+
+{% block content %}
+  <section class="mx-auto max-w-5xl">
+    <h1 class="text-xl font-semibold mb-2">Налаштування</h1>
+
+    <div class="flex flex-col-reverse px-2 md:px-0 md:grid md:grid-cols-12">
+      <!-- Form, messages column -->
+      <div class="pr-0 md:pr-2 md:col-span-9">
+        {% if messages %}
+          {% for message in messages %}
+            {% include "alert.html" with message=message style="success" %}
+          {% endfor %}
+        {% endif %}
+
+        <form action="{% url 'users:update' user.pk %}" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          {{ form|crispy }}
+
+          <div class="flex mt-4">
+            <button type="submit" class="mr-1 inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800">
+              Зберегти зміненоия
+            </button>
+            <a href="{% url 'users:public_profile' user.username %}" class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-green-700 rounded-lg focus:ring-4 focus:ring-green-200 hover:bg-green-800">
+              Переглядеть профиль
+            </a>
+            <a href="{% url 'users:onboarding' %}" class="ml-2 inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-600 rounded-lg focus:ring-4 focus:ring-indigo-200 hover:bg-indigo-700">
+              Анкета рекомендацій
+            </a>
+          </div>
+        </form>
+      </div>
+
+      <!-- Profile picture -->
+      <div class="md:col-span-3 flex mb-2">
+        {% if user.profile_image %}
+          <img src="{{ user.profile_image.url }}" class="w-64 h-64 rounded-full mx-auto" alt="{{ user.username }}">
+        {% endif %}
+      </div>
+    </div>
+  </section>
+{% endblock content %}

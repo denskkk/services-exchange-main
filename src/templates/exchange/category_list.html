@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Список всех рубрик на сайте
+{% endblock %}
+
+{% block content %}
+  <section class="mx-auto max-w-6xl">
+    <div class="flex items-center justify-between gap-4 mb-4">
+      <h1 class="text-2xl font-extrabold text-ink font-display">Список всіх рубрик на сайті</h1>
+      {% if user.is_authenticated %}
+        <a href="{% url 'exchange:category_propose' %}" class="btn btn-ghost">Не знайшли потрібну? Запропонуйте</a>
+      {% else %}
+        <a href="{% url 'account_login' %}" class="btn btn-ghost">Увійти, щоб запропонувати</a>
+      {% endif %}
+    </div>
+
+  {% comment %} Платформа послуг: посилання ведуть на список послуг {% endcomment %}
+
+    {% for top_category in category_list %}
+      {% if top_category.parent == None %}
+        <section class="mb-8">
+          <h2 class="text-xl font-semibold mb-2">{{ top_category }}</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {% for mid_category in top_category.subcategories.all %}
+              <div class="flex flex-col border border-gray-300 shadow-md rounded-lg p-4">
+                <h3 class="font-medium mb-2">{{ mid_category.title }}</h3>
+                {% for low_category in mid_category.subcategories.all %}
+                  <div>
+                    <a class="hover:underline" href="{% url 'services:list' %}?category_id={{ low_category.pk }}">
+                      {{ low_category.title }}
+                    </a>
+                  </div>
+                {% endfor %}
+              </div>
+            {% endfor %}
+          </div>
+        </section>
+      {% endif %}
+    {% endfor %}
+  </section>
+{% endblock content %}

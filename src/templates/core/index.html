@@ -1,0 +1,292 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+  СВІЙ ДЛЯ СВОЇХ
+{% endblock %}
+
+{% block content %}
+<div class="bg-light-bg">
+
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-br from-soft-blue via-white to-soft-yellow rounded-2xl shadow-elevated mt-3">
+    <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10 lg:gap-12 items-center py-8 md:py-16">
+        <div class="text-center lg:text-left">
+          <h1 class="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-ink tracking-tight leading-tight">
+            Свої для своїх — тут довіра на першому місці!
+          </h1>
+          <p class="mt-4 sm:mt-5 text-base sm:text-lg text-ink/70 max-w-xl mx-auto lg:mx-0">
+            Це проста платформа послуг: знаходьте потрібних виконавців і переглядайте їх публічні профілі з усіма даними.
+          </p>
+          <div class="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
+            <a href="{% url 'services:list' %}" class="btn btn-primary">
+              Переглянути всі послуги
+            </a>
+            <a href="{% url 'services:list' %}" class="btn btn-secondary">
+              Перейти до каталогу
+            </a>
+            {% if user.is_authenticated and not user.questionnaire_completed %}
+              <a href="{% url 'users:onboarding' %}" class="btn btn-ghost">Підібрати послуги</a>
+            {% elif user.is_authenticated %}
+              <a href="{% url 'users:recommendations' %}" class="btn btn-ghost">Мої рекомендації</a>
+            {% endif %}
+          </div>
+        </div>
+        <div class="desktop-image md:block">
+          <img class="w-full h-auto rounded-2xl shadow-elevated ring-4 ring-white/60" src="{% static "images/cta1.png" %}" alt="Ілюстрація робочого процесу">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="py-12 md:py-24">
+    <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
+      <div class="text-center max-w-3xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-extrabold text-ink font-display">Отримувати послуги — це просто!</h2>
+        <p class="mt-4 text-lg text-ink/70">
+          Ставши користувачем сайту, ви зможете замовляти послуги або заробляти на виконанні проєктів, зробивши лише кілька простих кроків:
+        </p>
+      </div>
+  <div class="mt-8 sm:mt-12 grid gap-4 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <!-- Step 1 -->
+        <div class="p-8 bg-white rounded-2xl shadow-soft hover:shadow-elevated border border-accent-gray/70 text-center transition-transform hover:-translate-y-0.5">
+          <div class="flex justify-center items-center mb-5 mx-auto w-16 h-16 rounded-full bg-soft-blue text-ukraine-blue ring-2 ring-white">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          </div>
+          <h3 class="mb-2 text-xl font-bold text-ink">Оберіть послугу</h3>
+          <p class="text-ink/70">Ви можете обрати будь-яку послугу з каталогу. Якщо не знайдете нічого підходящого, просто створіть власний проєкт!</p>
+        </div>
+        <!-- Step 2 -->
+        <div class="p-8 bg-white rounded-2xl shadow-soft hover:shadow-elevated border border-accent-gray/70 text-center transition-transform hover:-translate-y-0.5">
+          <div class="flex justify-center items-center mb-5 mx-auto w-16 h-16 rounded-full bg-soft-blue text-ukraine-blue ring-2 ring-white">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+          </div>
+          <h3 class="mb-2 text-xl font-bold text-ink">Оформіть замовлення</h3>
+          <p class="text-ink/70">Замовляйте послуги, що сподобалися. При замовленні з вашого балансу буде списано вартість послуги для гарантії оплати.</p>
+        </div>
+        <!-- Step 3 -->
+        <div class="p-8 bg-white rounded-2xl shadow-soft hover:shadow-elevated border border-accent-gray/70 text-center transition-transform hover:-translate-y-0.5">
+          <div class="flex justify-center items-center mb-5 mx-auto w-16 h-16 rounded-full bg-soft-blue text-ukraine-blue ring-2 ring-white">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </div>
+          <h3 class="mb-2 text-xl font-bold text-ink">Отримайте результат</h3>
+          <p class="text-ink/70">Приймайте роботу, коли будете задоволені результатом! Виконавець отримає кошти на свій баланс, щойно ви підтвердите виконання.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="py-12 sm:py-16 md:py-24">
+    <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
+      <div class="text-center max-w-3xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-extrabold text-ink font-display">Чому обирають нас</h2>
+        <p class="mt-4 text-lg text-ink/70">Сервіс створений з любов'ю до українського стилю та європейської якості — надійно, зручно та прозоро.</p>
+      </div>
+      <div class="mt-12 grid gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <!-- Feature 1 -->
+        <div class="p-7 bg-white rounded-2xl shadow-soft hover:shadow-elevated border border-accent-gray/70 transition-transform hover:-translate-y-0.5">
+          <div class="w-12 h-12 rounded-xl bg-soft-blue text-ukraine-blue flex items-center justify-center mb-4">
+            <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="m12 22l-7-4V6l7-4l7 4v12zm0-2.3l5-2.85V7.15l-5 2.85zM7 16.85l5 2.85V10L7 7.15z"/></svg>
+          </div>
+          <h3 class="text-lg font-bold text-ink">Безпека угод</h3>
+          <p class="mt-2 text-ink/70">Оплата резервується до підтвердження результату — спокій та довіра обом сторонам.</p>
+        </div>
+        <!-- Feature 2 -->
+        <div class="p-7 bg-white rounded-2xl shadow-soft hover:shadow-elevated border border-accent-gray/70 transition-transform hover:-translate-y-0.5">
+          <div class="w-12 h-12 rounded-xl bg-soft-blue text-ukraine-blue flex items-center justify-center mb-4">
+            <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12q-1.65 0-2.825-1.175T8 8t1.175-2.825T12 4t2.825 1.175T16 8t-1.175 2.825T12 12m0 8q-2.9 0-5.175-1.638T3 15q.05-1.2 1.075-1.925T6.15 12.35q1.45.65 2.713 1.025T12 13.75q1.35 0 2.613-.375t2.712-1.025q1.2-.55 2.225.175T21 15q-.65 2.75-2.925 4.375T12 20"/></svg>
+          </div>
+          <h3 class="text-lg font-bold text-ink">Перевірені виконавці</h3>
+          <p class="mt-2 text-ink/70">Репутація, відгуки та портфоліо допоможуть обрати найкращого спеціаліста.</p>
+        </div>
+        <!-- Feature 3 -->
+        <div class="p-7 bg-white rounded-2xl shadow-soft hover:shadow-elevated border border-accent-gray/70 transition-transform hover:-translate-y-0.5">
+          <div class="w-12 h-12 rounded-xl bg-soft-blue text-ukraine-blue flex items-center justify-center mb-4">
+            <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M5 22q-.825 0-1.412-.587T3 20V4q0-.825.588-1.412T5 2h14q.825 0 1.413.588T21 4v16q0 .825-.587 1.413T19 22zM5 8h14V4H5zm0 4v8h14v-8z"/></svg>
+          </div>
+          <h3 class="text-lg font-bold text-ink">Прозорі умови</h3>
+          <p class="mt-2 text-ink/70">Зрозумілі правила, без прихованих платежів — все чітко та по-справжньому.</p>
+        </div>
+        <!-- Feature 4 -->
+        <div class="p-7 bg-white rounded-2xl shadow-soft hover:shadow-elevated border border-accent-gray/70 transition-transform hover:-translate-y-0.5">
+          <div class="w-12 h-12 rounded-xl bg-soft-blue text-ukraine-blue flex items-center justify-center mb-4">
+            <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M16 22v-2H8v2zM6 6H4V4h16v2h-2v9q0 1.05-.725 1.775T15.5 17H8.5q-1.05 0-1.775-.725T6 15z"/></svg>
+          </div>
+          <h3 class="text-lg font-bold text-ink">Підтримка</h3>
+          <p class="mt-2 text-ink/70">Допомога в будь-яких питаннях — ми поряд на кожному етапі.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Popular Categories Section -->
+  <section class="py-12 md:py-20">
+    <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
+      <div class="flex items-end justify-between flex-wrap gap-4">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-extrabold text-ink font-display">Популярні рубрики</h2>
+          <p class="mt-2 text-ink/70">Оберіть напрям і починайте співпрацю вже сьогодні.</p>
+        </div>
+        <div class="flex gap-2">
+          <a href="{% url 'exchange:category_list' %}" class="btn btn-ghost">Дивитись усі</a>
+          {% if user.is_authenticated %}
+            <a href="{% url 'exchange:category_propose' %}" class="btn btn-ghost">Запропонувати категорію</a>
+          {% else %}
+            <a href="{% url 'account_login' %}" class="btn btn-ghost">Запропонувати</a>
+          {% endif %}
+        </div>
+      </div>
+  <div class="mt-6 sm:mt-8 grid gap-3 sm:gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
+        {% for cat in service_categories %}
+          <a href="{% url 'services:list' %}?category_id={{ cat.pk }}" class="group bg-white border border-accent-gray/70 rounded-xl px-4 py-3 shadow-soft hover:shadow-elevated hover:-translate-y-0.5 transition flex items-center justify-center text-center text-ink">
+            <span class="whitespace-nowrap">{{ cat.title }}</span>
+          </a>
+        {% empty %}
+          <div class="text-gray-500">Категорії з послугами поки що відсутні.</div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Latest Services Section -->
+  <section class="py-10 sm:py-14">
+    <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
+      <div class="flex items-end justify-between flex-wrap gap-4 mb-6">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-extrabold text-ink font-display">Останні додані послуги</h2>
+          <p class="mt-2 text-ink/70">Нові пропозиції від виконавців спільноти.</p>
+        </div>
+        <div class="flex gap-2">
+          <a href="{% url 'services:list' %}" class="btn btn-ghost">Дивитись усі послуги</a>
+        </div>
+      </div>
+      <div class="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        {% for service in latest_services %}
+          <div class="p-4 bg-white rounded-xl border border-accent-gray/70 shadow-soft hover:shadow-elevated transition">
+            <a href="{% url 'services:detail' service.pk %}">
+              {% if service.image %}
+                <img src="{{ service.image.url }}" class="w-full h-40 object-cover rounded-lg mb-3" alt="{{ service.title }}">
+              {% else %}
+                <div class="w-full h-40 bg-gray-100 rounded-lg mb-3"></div>
+              {% endif %}
+            </a>
+            <a href="{% url 'services:detail' service.pk %}" class="text-lg font-semibold text-dark-text hover:text-brand-blue transition-colors line-clamp-2" title="{{ service.title }}">{{ service.title }}</a>
+            <div class="mt-1 text-sm text-gray-600">
+              <a class="hover:underline" href="{% url 'services:list' %}?category_id={{ service.category.pk }}">{{ service.category.title }}</a>
+            </div>
+            <div class="mt-2 flex items-center justify-between">
+              <div class="text-ink font-semibold">{{ service.price }} ₴</div>
+              <div class="text-gray-500 text-sm">за {{ service.term }} дн.</div>
+            </div>
+          </div>
+        {% empty %}
+          <div class="text-gray-500">Поки немає нових послуг.</div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="py-14">
+    <div class="container mx-auto max-w-6xl px-6 lg:px-10">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div class="bg-white rounded-2xl border border-accent-gray/70 p-6 text-center shadow-soft">
+          <div class="text-3xl font-extrabold text-ink">10 000+</div>
+          <div class="mt-1 text-ink/70">послуг</div>
+        </div>
+        <div class="bg-white rounded-2xl border border-accent-gray/70 p-6 text-center shadow-soft">
+          <div class="text-3xl font-extrabold text-ink">7 500+</div>
+          <div class="mt-1 text-ink/70">проєктів</div>
+        </div>
+        <div class="bg-white rounded-2xl border border-accent-gray/70 p-6 text-center shadow-soft">
+          <div class="text-3xl font-extrabold text-ink">4.9/5</div>
+          <div class="mt-1 text-ink/70">середня оцінка</div>
+        </div>
+        <div class="bg-white rounded-2xl border border-accent-gray/70 p-6 text-center shadow-soft">
+          <div class="text-3xl font-extrabold text-ink">24/7</div>
+          <div class="mt-1 text-ink/70">підтримка</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="py-16 md:py-24">
+    <div class="container mx-auto max-w-7xl px-6 lg:px-10">
+      <div class="text-center max-w-3xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-extrabold text-ink font-display">Відгуки користувачів</h2>
+        <p class="mt-4 text-lg text-ink/70">Нас рекомендують підприємці, фрилансери та команди з усієї України.</p>
+      </div>
+  <div class="mt-8 sm:mt-12 grid gap-4 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div class="p-7 bg-white rounded-2xl border border-accent-gray/70 shadow-soft hover:shadow-elevated transition">
+          <div class="text-ink">“Знайшов дизайнера за день — результат перевершив очікування! Зручний сервіс і приємний досвід.”</div>
+          <div class="mt-4 text-sm font-medium text-ink/80">— Андрій, підприємець</div>
+        </div>
+        <div class="p-7 bg-white rounded-2xl border border-accent-gray/70 shadow-soft hover:shadow-elevated transition">
+          <div class="text-ink">“Отримала кілька замовлень у перший тиждень. Система безпечних платежів — супер!”</div>
+          <div class="mt-4 text-sm font-medium text-ink/80">— Марія, копірайтерка</div>
+        </div>
+        <div class="p-7 bg-white rounded-2xl border border-accent-gray/70 shadow-soft hover:shadow-elevated transition">
+          <div class="text-ink">“Зручно керувати проєктами та спілкуватися з клієнтами в одному місці.”</div>
+          <div class="mt-4 text-sm font-medium text-ink/80">— Олег, розробник</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="py-12 sm:py-16 md:py-24">
+    <div class="container mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-extrabold text-ink font-display">Питання та відповіді</h2>
+        <p class="mt-4 text-lg text-ink/70">Коротко про головне. Якщо залишилися питання — звертайтеся до підтримки.</p>
+      </div>
+  <div class="mt-6 sm:mt-10 grid gap-3 sm:gap-4">
+        <details class="group bg-white border border-accent-gray/70 rounded-xl p-5 shadow-soft">
+          <summary class="cursor-pointer list-none flex items-center justify-between">
+            <span class="font-semibold text-ink">Як оформити замовлення на послугу?</span>
+            <svg class="w-5 h-5 text-ink group-open:rotate-180 transition" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12 15L6 9h12z"/></svg>
+          </summary>
+          <p class="mt-3 text-ink/70">Оберіть послугу, натисніть «Замовити» та дотримуйтеся інструкцій. Оплата резервується до підтвердження результату.</p>
+        </details>
+        <details class="group bg-white border border-accent-gray/70 rounded-xl p-5 shadow-soft">
+          <summary class="cursor-pointer list-none flex items-center justify-between">
+            <span class="font-semibold text-ink">Що робити, якщо результат не підходить?</span>
+            <svg class="w-5 h-5 text-ink group-open:rotate-180 transition" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12 15L6 9h12z"/></svg>
+          </summary>
+          <p class="mt-3 text-ink/70">Ви можете надіслати правки або відхилити роботу. Кошти будуть повернені, якщо робота не прийнята.</p>
+        </details>
+        <details class="group bg-white border border-accent-gray/70 rounded-xl p-5 shadow-soft">
+          <summary class="cursor-pointer list-none flex items-center justify-between">
+            <span class="font-semibold text-ink">Чи є комісія сервісу?</span>
+            <svg class="w-5 h-5 text-ink group-open:rotate-180 transition" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12 15L6 9h12z"/></svg>
+          </summary>
+          <p class="mt-3 text-ink/70">Так, невелика комісія врахована у вартості та відображається прозоро під час оформлення.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Final CTA Section -->
+  <section class="py-8 sm:py-10">
+    <div class="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-10">
+      <div class="rounded-2xl p-6 sm:p-8 md:p-10 bg-gradient-to-r from-ukraine-blue to-ukraine-yellow shadow-elevated">
+        <div class="flex flex-col lg:flex-row items-center justify-between gap-4 sm:gap-6">
+          <div class="text-center lg:text-left">
+            <h3 class="text-2xl md:text-3xl font-extrabold text-white drop-shadow-sm">Готові почати?</h3>
+            <p class="mt-2 text-white/90">Знайдіть потрібну послугу або запропонуйте свої навички та отримуйте замовлення.</p>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+            <a href="{% url 'services:list' %}" class="btn btn-primary bg-white text-ukraine-blue hover:bg-white/90">Перейти до послуг</a>
+            <a href="{% url 'projects:list' %}" class="btn btn-ghost bg-white/10 text-white hover:bg-white/20 border border-white/30">Переглянути біржу</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock content %}

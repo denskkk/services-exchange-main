@@ -1,0 +1,46 @@
+name: Quality Assurance
+on: [pull_request, workflow_call]
+
+jobs:
+  lint:
+    name: Lint Code
+    runs-on: ubuntu-latest
+    container: python:3.10.2-slim-bullseye
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: pip install -r ./src/requirements.txt
+
+      - name: Lint Code
+        run: ruff check . -n --select I
+
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    container: python:3.10.2-slim-bullseye
+
+    services:
+      db:
+        image: postgres:16
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+      redis:
+        image: redis:7.2.4
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: pip install -r ./src/requirements.txt
+
+      - name: Run Tests
+        env:
+          SECRET_KEY: "django-test-key"
+          DB_NAME: postgres
+          DB_USER: postgres
+          DB_PASSWORD: postgres
+          DB_HOST: db
+          DB_PORT: 5432
+        run: python src/manage.py collectstatic && cd ./src && python manage.py test

@@ -1,0 +1,626 @@
+[
+{
+  "model": "exchange.category",
+  "pk": 1,
+  "fields": {
+    "title": "Разработка и ИТ",
+    "parent": null
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 2,
+  "fields": {
+    "title": "Доработка и настройка сайта",
+    "parent": 1
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 3,
+  "fields": {
+    "title": "Создание сайтов",
+    "parent": 1
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 4,
+  "fields": {
+    "title": "Защита и лечение сайта",
+    "parent": 2
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 5,
+  "fields": {
+    "title": "Тексты и переводы",
+    "parent": null
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 6,
+  "fields": {
+    "title": "Тексты и наполнение сайта",
+    "parent": 5
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 7,
+  "fields": {
+    "title": "Статьи",
+    "parent": 6
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 8,
+  "fields": {
+    "title": "Дизайн",
+    "parent": null
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 9,
+  "fields": {
+    "title": "Логотип и брендинг",
+    "parent": 8
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 10,
+  "fields": {
+    "title": "Логотипы",
+    "parent": 9
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 11,
+  "fields": {
+    "title": "Фирменный стиль",
+    "parent": 9
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 12,
+  "fields": {
+    "title": "Веб и мобильный дизайн",
+    "parent": 8
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 13,
+  "fields": {
+    "title": "Веб-дизайн",
+    "parent": 12
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 14,
+  "fields": {
+    "title": "Мобильный дизайн",
+    "parent": 12
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 15,
+  "fields": {
+    "title": "Баннеры и иконки",
+    "parent": 12
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 16,
+  "fields": {
+    "title": "Полиграфия",
+    "parent": 8
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 17,
+  "fields": {
+    "title": "Брошюра и буклет",
+    "parent": 16
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 18,
+  "fields": {
+    "title": "Листовки и флаер",
+    "parent": 16
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 19,
+  "fields": {
+    "title": "Плакат и афиша",
+    "parent": 16
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 20,
+  "fields": {
+    "title": "Презентации и инфографика",
+    "parent": 8
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 21,
+  "fields": {
+    "title": "Презентации",
+    "parent": 20
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 22,
+  "fields": {
+    "title": "Инфографика",
+    "parent": 20
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 23,
+  "fields": {
+    "title": "Карта и схема",
+    "parent": 20
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 24,
+  "fields": {
+    "title": "Промышленный дизайн",
+    "parent": 8
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 25,
+  "fields": {
+    "title": "Электроника и устройства",
+    "parent": 24
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 26,
+  "fields": {
+    "title": "Предметы и аксессуары",
+    "parent": 24
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 27,
+  "fields": {
+    "title": "Наружная реклама",
+    "parent": 8
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 28,
+  "fields": {
+    "title": "Биллборды и стенды",
+    "parent": 27
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 29,
+  "fields": {
+    "title": "Витрины и вывески",
+    "parent": 27
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 30,
+  "fields": {
+    "title": "Доработка сайта",
+    "parent": 2
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 31,
+  "fields": {
+    "title": "Настройка сайта",
+    "parent": 2
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 32,
+  "fields": {
+    "title": "Новый сайт",
+    "parent": 3
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 33,
+  "fields": {
+    "title": "Копия сайта",
+    "parent": 3
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 34,
+  "fields": {
+    "title": "Верстка",
+    "parent": 1
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 35,
+  "fields": {
+    "title": "Верстка по макету",
+    "parent": 34
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 36,
+  "fields": {
+    "title": "Доработка и адаптация верстки сайта",
+    "parent": 34
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 37,
+  "fields": {
+    "title": "Дектоп программирование",
+    "parent": 1
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 38,
+  "fields": {
+    "title": "Макросы для Office",
+    "parent": 37
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 39,
+  "fields": {
+    "title": "1С",
+    "parent": 37
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 40,
+  "fields": {
+    "title": "Готовые программы",
+    "parent": 37
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 41,
+  "fields": {
+    "title": "Программы на заказ",
+    "parent": 37
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 42,
+  "fields": {
+    "title": "Скрипты и боты",
+    "parent": 1
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 43,
+  "fields": {
+    "title": "Скрипты",
+    "parent": 42
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 44,
+  "fields": {
+    "title": "Парсеры",
+    "parent": 42
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 45,
+  "fields": {
+    "title": "Чат-боты",
+    "parent": 42
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 46,
+  "fields": {
+    "title": "Мобильные приложения",
+    "parent": 1
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 47,
+  "fields": {
+    "title": "iOS",
+    "parent": 46
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 48,
+  "fields": {
+    "title": "Android",
+    "parent": 46
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 49,
+  "fields": {
+    "title": "Сервера и хостинг",
+    "parent": 1
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 50,
+  "fields": {
+    "title": "Администрирование сервера",
+    "parent": 49
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 51,
+  "fields": {
+    "title": "Домены",
+    "parent": 49
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 52,
+  "fields": {
+    "title": "Хостинг",
+    "parent": 49
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 53,
+  "fields": {
+    "title": "SEO-тексты",
+    "parent": 6
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 54,
+  "fields": {
+    "title": "Карточки товаров",
+    "parent": 6
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 55,
+  "fields": {
+    "title": "Художественные тексты",
+    "parent": 6
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 56,
+  "fields": {
+    "title": "Набор текста",
+    "parent": 5
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 57,
+  "fields": {
+    "title": "С аудио/видео",
+    "parent": 56
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 58,
+  "fields": {
+    "title": "С изображений",
+    "parent": 56
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 59,
+  "fields": {
+    "title": "Резюме и вакансии",
+    "parent": 5
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 60,
+  "fields": {
+    "title": "Составление резюме",
+    "parent": 59
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 61,
+  "fields": {
+    "title": "Сопроводительные письма",
+    "parent": 59
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 62,
+  "fields": {
+    "title": "Текст вакансии",
+    "parent": 59
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 63,
+  "fields": {
+    "title": "Аудио, видео, съемка",
+    "parent": null
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 64,
+  "fields": {
+    "title": "Аудиозапись и озвучка",
+    "parent": 63
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 65,
+  "fields": {
+    "title": "Озвучка и дикторы",
+    "parent": 64
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 66,
+  "fields": {
+    "title": "Аудиоролик",
+    "parent": 64
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 67,
+  "fields": {
+    "title": "Музыка и песни",
+    "parent": 63
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 68,
+  "fields": {
+    "title": "Написание музыки",
+    "parent": 67
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 69,
+  "fields": {
+    "title": "Тексты песен",
+    "parent": 67
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 70,
+  "fields": {
+    "title": "Редактирование аудио",
+    "parent": 63
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 71,
+  "fields": {
+    "title": "Обработка звука",
+    "parent": 70
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 72,
+  "fields": {
+    "title": "Выделение звука из видео",
+    "parent": 70
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 73,
+  "fields": {
+    "title": "Видеоролики",
+    "parent": 63
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 74,
+  "fields": {
+    "title": "Анимационный ролик",
+    "parent": 73
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 75,
+  "fields": {
+    "title": "Проморолик",
+    "parent": 73
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 76,
+  "fields": {
+    "title": "3D-анимация",
+    "parent": 73
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 77,
+  "fields": {
+    "title": "Слайд-шоу",
+    "parent": 73
+  }
+},
+{
+  "model": "exchange.category",
+  "pk": 78,
+  "fields": {
+    "title": "Видео с ведущим",
+    "parent": 73
+  }
+}
+]

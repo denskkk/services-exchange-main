@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Заказ №{{ order.pk }}
+{% endblock %}
+
+{% block content %}
+  <section class="mx-auto max-w-5xl">
+    <div class="grid grid-cols-12 gap-5">
+      <div class="col-span-8 flex flex-col">
+        <!-- MARK: Картка замовлення -->
+        <div class="border border-gray-100 p-4 mb-4">
+          <h1 class="text-3xl font-semibold mb-4">Замовлення №{{ order.pk }}</h1>
+
+          {% if messages %}
+            {% for message in messages %}
+              {% if message.extra_tags == 'warning' %}
+                {% include "alert.html" with message=message style="warning" %}
+              {% else %}
+                {% include "alert.html" with message=message style="success" %}
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+
+          <h2 class="text-xl font-medium mb-2">{{ order.item.title }}</h2>
+
+          <div class="mb-1">
+            {% if user == order.customer %}
+              Виконавець:
+              <a href="{% url 'users:public_profile' order.provider.username %}" class="hover:underline">{{ order.provider.username }}</a>
+            {% else %}
+              Замовник:
+              <a href="{% url 'users:public_profile' order.customer.username %}" class="hover:underline">{{ order.customer.username }}</a>
+            {% endif %}
+          </div>
+          <div class="mb-1">
+            Створено: {{ order.created }}
+          </div>
+          <div class="mb-1">
+            Бюджет: {{ order.price }} ₴
+          </div>
+          <div class="mb-8">
+            Статус: {{ order.get_status_display }}
+          </div>
+          <div>
+            {{ order.item.description|linebreaksbr }}
+          </div>
+        </div>
+
+        <!-- MARK: Історія событий по замовленняу -->
+        <div class="border border-gray-100 p-4 mb-4">
+          <h2 class="text-xl font-medium mb-2">Історія событий по замовленняу</h2>
+
+          {% for action in actions %}
+            <div>{{ action.user }} {{ action.verb }} <span class="text-gray-500 text-sm">&middot; {{ action.created }}</span></div>
+          {% endfor %}
+        </div>
+
+        <!-- MARK: Сообщения -->
+        <div class="border border-gray-100 p-4 mb-4">
+          <h2 class="text-xl font-medium mb-2">Сообщения</h2>
+
+          {% if chat_messages.count %}
+            <div class="flex flex-col mb-4">
+              {% for message in chat_messages %}
+                <div class="p-4 flex flex-col" id="message_{{ message.pk }}">
+                  <div class="text-sm">{{ message.sender.username }} пишет <span class="text-gray-500">&middot; {{ message.created }}</span></div>
+                  <div>{{ message.text }}</div>
+                  {% if message.file %}
+                    <div class="text-sm text-gray-500">Файл: <a href="{{ message.file.url }}" class="hover:underline">{{ message.file.name }}</a></div>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          <form action="{% url 'exchange:message_create' %}" method="POST" enctype="multipart/form-data" class="mb-2">
+            {% csrf_token %}
+            <input type="hidden" name="topic_ct" value="Order">
+            <input type="hidden" name="topic_id" value="{{ order.pk }}">
+            {% if user == order.customer %}
+              <input type="hidden" name="recipient_id" value={{ order.provider.pk }}>
+            {% else %}
+              <input type="hidden" name="recipient_id" value={{ order.customer.pk }}>
+            {% endif %}
+            <textarea name="text" required cols="40" rows="5" minlength="3" maxlength="1500" class="mb-2 textarea px-4 py-2 text-gray-700 bg-white focus:outline-none w-full border appearance-none block leading-normal rounded-lg border-gray-300"></textarea>
+            <div class="flex items-center">
+              <div class="flex-1">Прикрепить: <input type="file" name="file" accept="*/*"></div>
+              <button class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Відправити</button>
+            </div>
+          </form>
+          {% include "alert.html" with message="Вы можете прикрепить файл к вашему сообщению." style="info" %}
+        </div>
+      </div>
+
+      <div class="col-span-4 flex flex-col">
+          <div class="border border-gray-100 p-4 flex flex-col mb-4">
+            <h2 class="text-xl font-medium mb-2">
+              {% if user == order.customer %}
+                Вы – замовник
+              {% else %}
+                Вы – виконавець
+              {% endif %}
+            </h2>
+
+            {% if order.is_completed %}
+              <p>Ура! 🎉 Заказ был успешно выполнен.</p>
+            {% endif %}
+
+            {% if user == order.customer %}
+              <!-- MARK: Кнопки действий для замовника -->
+              {% if order.status == 'created' %}
+                {# Пока замовлення не принят исполнителем, замовник может отменить его. #}
+                <form action="{% url 'orders:set_status' order.pk %}" method="POST">
+                  {% csrf_token %}
+                  <input type="hidden" name="new_status" value="cancelled_by_customer">
+                  <button class="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Скасувати замовлення</button>
+                </form>
+              {% elif order.status == 'in_progress' %}
+                <p>Ваш замовлення находится в работе. Исполнитель направит его вам на проверку по мере готовности.</p>
+              {% elif order.status == 'submitted_by_provider' %}
+                {# Рассмотрев результаты работы исполнителя, замовник может принять работу или вернуть на доработку #}
+                <p class="mb-2 text-sm">Исполнитель направил вам выполненный замовлення на проверку. Принимайте работу только в том случае, если выполнены все задачи, или верните замовлення на доработку.</p>
+                <form action="{% url 'orders:set_status' order.pk %}" method="POST">
+                  {% csrf_token %}
+                  <input type="hidden" name="new_status" value="accepted_by_customer">
+                  <button class="mb-1 w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Принять работу</button>
+                </form>
+                <form action="{% url 'orders:set_status' order.pk %}" method="POST">
+                  {% csrf_token %}
+                  <input type="hidden" name="new_status" value="returned_by_customer">
+                  <button class="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Вернуть на доработку</button>
+                </form>
+              {% elif order.status == 'returned_by_customer' %}
+                <p class="text-sm">Вы вернули замовлення на доработку исполнителю. Дожидайтесь завершеноия работы.</p>
+              {% endif %}
+            {% else %}
+              <!-- MARK: Кнопки действий для исполнителя -->
+              {% if order.status == 'created' %}
+                {# Пока замовлення только створено, виконавець может принять или отклонить его. #}
+                <form action="{% url 'orders:set_status' order.pk %}" method="POST">
+                  {% csrf_token %}
+                  <input type="hidden" name="new_status" value="in_progress">
+                  <button class="mb-1 w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Принять замовлення</button>
+                </form>
+                <form action="{% url 'orders:set_status' order.pk %}" method="POST">
+                  {% csrf_token %}
+                  <input type="hidden" name="new_status" value="rejected_by_provider">
+                  <button class="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Отклонить замовлення</button>
+                </form>
+              {% elif order.status == 'in_progress' or order.status == 'returned_by_customer' %}
+                {# Заказ в работе/возвращенный на доработку виконавець может "сдать" по готовности: #}
+                <p class="mb-2 text-sm">Сдавайте замовлення, только если выполнены все поставленные задачи.</p>
+                <form action="{% url 'orders:set_status' order.pk %}" method="POST">
+                  {% csrf_token %}
+                  <input type="hidden" name="new_status" value="submitted_by_provider">
+                  <button class="mb-1 w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Сдать замовлення</button>
+                </form>
+              {% elif order.status == 'submitted_by_provider' %}
+                <p class="text-sm">Вы направили работу на проверку замовнику. Ожидайте подтверждения, или возврата на доработку.</p>
+              {% endif %}
+            {% endif %}
+          </div>
+      </div>
+    </div>
+  </section>
+{% endblock content %}

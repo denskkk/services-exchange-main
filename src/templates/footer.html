@@ -1,0 +1,75 @@
+{% load static %}
+<footer class="mb-8 p-4 bg-white/90 supports-[backdrop-filter]:backdrop-blur sm:p-6 border border-gray-100 rounded-xl shadow-soft">
+  <div class="mx-auto max-w-screen-xl">
+    <div class="md:flex md:justify-between">
+      <div class="mb-6 md:mb-0">
+        <a href="{% url "core:index" %}" class="flex items-center">
+          <img src="{% static 'images/logo.svg' %}" alt="СВІЙ ДЛЯ СВОЇХ" class="mr-3 h-8 w-8">
+          <span class="self-center text-2xl font-extrabold tracking-tight whitespace-nowrap text-ink">СВІЙ ДЛЯ СВОЇХ</span>
+        </a>
+      </div>
+      <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-4">
+        <div>
+          <h2 class="mb-3 text-sm font-semibold text-ink uppercase tracking-wide">Навігація</h2>
+          <ul class="text-gray-600 space-y-2">
+            <li class="mb-4">
+              <a href="{% url 'exchange:category_list' %}" class="link">Рубрики</a>
+            </li>
+            <li>
+              <a href="{% url "core:index" %}" class="link">О сайте</a>
+            </li>
+          </ul>
+        </div>
+        
+        <div>
+          <h2 class="mb-3 text-sm font-semibold text-ink uppercase tracking-wide">Послуги</h2>
+          <ul class="text-gray-600 space-y-2">
+            {% if user.is_authenticated and user_mode == 'seller' %}
+              <li class="mb-4">
+                <a href="{% url 'services:create' %}" class="link ">Створити послугу</a>
+              </li>
+              <li class="mb-4">
+                <a href="{% url 'services:my_list' %}" class="link">Мої послуги</a>
+              </li>
+            {% endif %}
+            <li>
+              <a href="{% url 'services:list' %}" class="link">Усі послуги</a>
+            </li>
+          </ul>
+        </div>
+        <div class="mr-2">
+          <h2 class="mb-3 text-sm font-semibold text-ink uppercase tracking-wide">Учетная запись</h2>
+          <ul class="text-gray-600 space-y-2">
+            {% if user.is_authenticated %}
+              <li class="mb-4">
+                <a href="{% url 'users:public_profile' user.username %}" class="link">Профіль</a>
+              </li>
+              <li class="mb-4">
+                <a href="{% url 'users:update' user.pk %}" class="link">Налаштування</a>
+              </li>
+              <li class="mb-4">
+                <a href="{% url 'users:update_balance' %}" class="link">Баланс</a>
+              </li>
+              {% if user.is_superuser %}
+                <li class="mb-4">
+                  <a href="/admin/" class="link">Админка</a>
+                </li>
+              {% endif %}
+              <li class="mb-4">
+                <a href="{% url 'account_logout' %}" class="link">Выйти</a>
+              </li>
+            {% else %}
+              <li class="mb-4">
+                <a href="{% url 'account_signup' %}" class="link">Реєстрація</a>
+              </li>
+              <li>
+                <a href="{% url 'account_login' %}" class="link">Вхід</a>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</footer>

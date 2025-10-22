@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+
+{% block title %}
+  Створити послугу
+{% endblock %}
+
+{% block content %}
+  <section class="mx-auto max-w-5xl">
+    <h1 class="text-xl font-semibold mb-2">Створити послугу</h1>
+    {% if user_mode != 'seller' %}
+      {% include "alert.html" with message="Ви у режимі 'Я шукаю послугу'. Перемкніть у 'Я надаю послугу', щоб продовжити створення послуги." style="warning" %}
+    {% endif %}
+
+    <form action="{% url 'services:create' %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      {{ form|crispy }}
+      <div class="mt-2">
+        <p class="text-sm text-gray-600">Не знайшли потрібну категорію? Запропонуйте свою нижче або скористайтеся <a href="{% url 'exchange:category_propose' %}" class="link">формою пропозиції категорії</a>.</p>
+      </div>
+
+      <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800">
+        Опублікувати послугу
+      </button>
+    </form>
+  </section>
+{% endblock content %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+
+{% block title %}
+  Змінити проєкт
+{% endblock %}
+
+{% block content %}
+  <section class="mx-auto max-w-5xl">
+    <h1 class="text-2xl font-semibold mb-2">Змінити проєкт</h1>
+
+    {% if messages %}
+      <div class="mb-2">
+        {% for message in messages %}
+          {% include "alert.html" with message=message style="success" %}
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <form action="{% url 'projects:update' project.pk %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      {{ form|crispy }}
+
+      <div class="flex mt-4">
+        <button type="submit" class="mr-1 inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800">
+          Зберегти зміненоия
+        </button>
+        <a href="{% url 'projects:detail' project.pk %}" class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-green-700 rounded-lg focus:ring-4 focus:ring-green-200 hover:bg-green-800">
+          Переглядеть проєкт
+        </a>
+      </div>
+    </form>
+  </section>
+{% endblock content %}

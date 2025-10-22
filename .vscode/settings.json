@@ -1,0 +1,21 @@
+{
+  // Silence CSS validator for Tailwind/PostCSS directives in input.css
+  "css.lint.unknownAtRules": "ignore",
+  "scss.lint.unknownAtRules": "ignore",
+  "less.lint.unknownAtRules": "ignore",
+
+  // Better syntax highlighting and editor behavior for Tailwind utility CSS
+  "files.associations": {
+    "*.css": "postcss"
+  },
+
+  // Tailwind IntelliSense settings (effective if the extension is installed)
+  "tailwindCSS.includeLanguages": {
+    "django-html": "html",
+    "jinja-html": "html"
+  },
+  "tailwindCSS.emmetCompletions": true,
+
+  // Use project venv for Pylance/Django
+  "python.defaultInterpreterPath": ".venv/Scripts/python.exe"
+}

@@ -1,0 +1,76 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Django makemigrations and migrate",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"$env:PYTHONIOENCODING='utf-8'; $ErrorActionPreference = 'Stop'; .\\.venv\\Scripts\\python.exe .\\src\\manage.py makemigrations; .\\.venv\\Scripts\\python.exe .\\src\\manage.py migrate"
+			],
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Dev up (docker-compose.dev.yml)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"$ErrorActionPreference = 'Stop'; docker compose -f docker-compose.dev.yml up -d"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Apply migrations in web container",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"$ErrorActionPreference = 'Stop'; docker exec web python -m manage makemigrations; docker exec web python -m manage migrate"
+			],
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Open site locally",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"$ErrorActionPreference = 'Stop'; Start-Process http://localhost:8000/"
+			],
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Django makemigrations and migrate (detailed questionnaire)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"$env:PYTHONIOENCODING='utf-8'; $ErrorActionPreference = 'Stop'; .\\.venv\\Scripts\\python.exe .\\src\\manage.py makemigrations; .\\.venv\\Scripts\\python.exe .\\src\\manage.py migrate"
+			],
+			"problemMatcher": [],
+			"group": "build"
+		}
+	]
+}

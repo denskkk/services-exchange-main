@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Ошибка 403 - у вас нет доступа к запрашиваемой странице{% endblock title %}
+
+{% block content %}
+  <section class="mx-auto max-w-5xl">
+    <h2 class="text-xl font-semibold mb-2">
+      Ошибка 403 - у вас нет доступа к запрашиваемой странице
+    </h2>
+    <p>
+      К сожалению, у вас нет доступа к запрашиваемой странице. {{ exception }}
+      {# https://docs.djangoproject.com/en/4.1/ref/views/#the-403-http-forbidden-view #}
+    </p>
+  </section>
+{% endblock content %}
